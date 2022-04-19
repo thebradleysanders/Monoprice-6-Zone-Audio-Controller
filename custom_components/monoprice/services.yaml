@@ -1,0 +1,57 @@
+snapshot:
+  name: Snapshot
+  description: Take a snapshot of the media player zone.
+  target:
+    entity:
+      integration: monoprice
+      domain: media_player
+
+restore:
+  name: Restore
+  description: Restore a snapshot of the media player zone.
+  target:
+    entity:
+      integration: monoprice
+      domain: media_player
+
+set_balance:
+  name: Set Balance
+  description: Set the zone balance level.
+  target:
+    entity:
+      integration: monoprice
+      domain: media_player
+  fields:
+    level:
+      description: integer from 0 to 20 inclusive, where 0 is -10(left), 0 is center and 20 is +10 (right).
+      required: true
+      example: "10"
+      default: "0"
+
+set_bass:
+  name: Set Bass
+  description: Set the bass level.
+  target:
+    entity:
+      integration: monoprice
+      domain: media_player
+  fields:
+    level:
+      description: Integer from 0 to 14 inclusive.
+      required: true
+      example: "10"
+      default: "7"
+  
+set_treble:
+  name: Set Treble
+  description: Set treble level.
+  target:
+    entity:
+      integration: monoprice
+      domain: media_player
+  fields:
+    level:
+      description: Integer from 0 to 14 inclusive.
+      required: true
+      example: "10"
+      default: "7"
