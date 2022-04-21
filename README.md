@@ -7,7 +7,7 @@
 * Restart Home Assistant
 * Go to settings->integrations
 * Click add->Monoprice 6-Zone Amplifier
-* Configure using your serial port & zone names
+* Configure using your serial port & source names
 
 * <b>Note:</b> If the core integration is already configured, simply add this custom one to overwrite it, you should not need to delete & readd the integration.
 
