@@ -19,7 +19,7 @@
  * monoprice.set_treble
 
  ## Sound Modes
- The sound modes can be controlled via a select dropdown on the media_player card
+ The sound modes can be controlled via a select dropdown on the media_player card.
  The sound modes are:
  * Normal
  * High Bass
