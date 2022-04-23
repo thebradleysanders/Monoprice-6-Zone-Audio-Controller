@@ -9,7 +9,7 @@
 * Click add->Monoprice 6-Zone Amplifier Custom
 * Configure using your serial port & source names
 
-* <b>Note:</b> If the core integration is already configured, simply add this custom one to overwrite it, you should not need to delete & readd the integration.
+* <b>Note:</b> If the core integration is already configured, disable it before adding this custom one.
 
  ## Services
  * monoprice_custom.snapshot
