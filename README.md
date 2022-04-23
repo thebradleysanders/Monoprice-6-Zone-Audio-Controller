@@ -1,13 +1,15 @@
 # Home Assistant Custom Integration: Monoprice 6-Zone Amplifier
  An Integration for the Monoprice 6-Zone Amplifier, with added sound mode, balance, treble & bass
- This is a modification of the existing Monoprice integration, when installed this will override it.
+ This is a modification of the <a href="https://www.home-assistant.io/integrations/monoprice/">existing Monoprice integration</a>, when installed this will override it.
 
 ## How To:
-* add the monoprice folder to your /config/custom_components folder
-* restart Home Assistant
+* Add the monoprice folder to your /config/custom_components folder
+* Restart Home Assistant
 * Go to settings->integrations
-* Click add->Monoprice 6-Zone Amplifier
-* Configure using your serial port & zone names
+* Click add->Monoprice 6-Zone Amplifier Custom
+* Configure using your serial port & source names
+
+* <b>Note:</b> If the core integration is already configured, simply add this custom one to overwrite it, you should not need to delete & readd the integration.
 
  ## Services
  * monoprice.snapshot
@@ -17,7 +19,7 @@
  * monoprice.set_treble
 
  ## Sound Modes
- The sound modes can be controlled via a select dropdown on the media_player card
+ The sound modes can be controlled via a select dropdown on the media_player card.
  The sound modes are:
  * Normal
  * High Bass
