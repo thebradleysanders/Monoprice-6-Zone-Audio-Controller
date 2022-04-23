@@ -12,11 +12,11 @@
 * <b>Note:</b> If the core integration is already configured, simply add this custom one to overwrite it, you should not need to delete & readd the integration.
 
  ## Services
- * monoprice.snapshot
- * monoprice.restore
- * monoprice.set_balance
- * monoprice.set_bass
- * monoprice.set_treble
+ * monoprice_custom.snapshot
+ * monoprice_custom.restore
+ * monoprice_custom.set_balance
+ * monoprice_custom.set_bass
+ * monoprice_custom.set_treble
 
  ## Sound Modes
  The sound modes can be controlled via a select dropdown on the media_player card.
