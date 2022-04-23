@@ -2,7 +2,7 @@
   "config": {
     "step": {
       "user": {
-        "title": "Connect to the device Test",
+        "title": "Connect to the device",
         "data": {
           "port": "[%key:common::config_flow::data::port%]",
           "source_1": "Name of source #1",

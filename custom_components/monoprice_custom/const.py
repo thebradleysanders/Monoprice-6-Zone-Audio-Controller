@@ -1,6 +1,6 @@
 """Constants for the Monoprice 6-Zone Amplifier Media Player component."""
 
-DOMAIN = "monoprice"
+DOMAIN = "monoprice_custom"
 
 CONF_SOURCES = "sources"
 

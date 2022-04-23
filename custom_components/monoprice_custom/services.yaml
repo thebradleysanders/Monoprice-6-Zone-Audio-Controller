@@ -3,7 +3,7 @@ snapshot:
   description: Take a snapshot of the media player zone.
   target:
     entity:
-      integration: monoprice
+      integration: monoprice_custom
       domain: media_player
 
 restore:
@@ -11,7 +11,7 @@ restore:
   description: Restore a snapshot of the media player zone.
   target:
     entity:
-      integration: monoprice
+      integration: monoprice_custom
       domain: media_player
 
 set_balance:
@@ -33,7 +33,7 @@ set_bass:
   description: Set the bass level.
   target:
     entity:
-      integration: monoprice
+      integration: monoprice_custom
       domain: media_player
   fields:
     level:
@@ -47,7 +47,7 @@ set_treble:
   description: Set treble level.
   target:
     entity:
-      integration: monoprice
+      integration: monoprice_custom
       domain: media_player
   fields:
     level:
