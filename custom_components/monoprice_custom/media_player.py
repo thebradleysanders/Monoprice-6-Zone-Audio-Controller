@@ -152,7 +152,6 @@ async def async_setup_entry(
         hass.async_add_executor_job(_call_service, entities, service_call)
 
 
-
     hass.services.async_register(
         DOMAIN,
         SERVICE_SNAPSHOT,
@@ -249,7 +248,7 @@ class MonopriceZone(MediaPlayerDevice):
             identifiers={(DOMAIN, self.unique_id)},
             manufacturer="Monoprice",
             model="6-Zone Amplifier",
-            name=self.name,
+            name="Zone " + str(self._zone_id)
         )
 
     @property
@@ -323,19 +322,16 @@ class MonopriceZone(MediaPlayerDevice):
         """Set balance level."""
         level = int(call.data.get(ATTR_BALANCE))
         self._monoprice.set_balance(self._zone_id, level)
-        self.schedule_update_ha_state(True)
  
     def set_bass(self, call):
         """Set bass level."""
         level = int(call.data.get(ATTR_BASS))
         self._monoprice.set_bass(self._zone_id, level)
-        self.schedule_update_ha_state(True)
 
     def set_treble(self, call):
         """Set Treble level."""
         level = int(call.data.get(ATTR_TREBLE))
         self._monoprice.set_treble(self._zone_id, level)
-        self.schedule_update_ha_state(True)
 
     def select_source(self, source):
         """Set input source."""

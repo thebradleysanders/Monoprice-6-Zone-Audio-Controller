@@ -17,7 +17,7 @@ from .const import (
     UNDO_UPDATE_LISTENER,
 )
 
-PLATFORMS = [Platform.MEDIA_PLAYER]
+PLATFORMS = [Platform.MEDIA_PLAYER, Platform.NUMBER, Platform.SENSOR]
 
 _LOGGER = logging.getLogger(__name__)
 
