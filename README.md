@@ -8,10 +8,19 @@
  <b>Note:</b> if you your zones are slow to respond, make sure all entities in the zones you are not using are disabled in Home Assistant.
 
 ## How To:
+### <a href="https://github.com/hacs/integration">HACS</a>
+* Open HACS->Integrations->3 Dots->Custom repositories
+* Add this repository url: https://github.com/thebradleysanders/Monoprice-6-Zone-Home-Controller
+* Click on the newly added Monoprice 6-Zone Home Audio Controller
+* Click Download this repository with HACS
+* Restart Home Assistant
+* Go to Settings->Integrations->Add->Monoprice 6-Zone Amplifier Custom
+* Configure using your serial port & source names
+
+### Manual
 * Add the monoprice folder to your /config/custom_components folder
 * Restart Home Assistant
-* Go to settings->integrations
-* Click add->Monoprice 6-Zone Amplifier Custom
+* Go to Settings->Integrations->Add->Monoprice 6-Zone Amplifier Custom
 * Configure using your serial port & source names
 
 <b>Note:</b> If the core integration is already configured, disable it before adding this custom one.
@@ -21,9 +30,9 @@
 These are features not included in the original Monoprice Integration.
 
  #### Zones
- * 10 - Used to control all zones on the master controller
- * 20 - Used to control all zones on the slave 1 controller
- * 30 - Used to control all zones on the slave 2 controller
+ * 10 - Used to control all zones on the master controller <b>- Entity Disabled, there are known issues, alpha feature.</b>
+ * 20 - Used to control all zones on the slave 1 controller <b>- Entity Disabled, there are known issues, alpha feature.</b>
+ * 30 - Used to control all zones on the slave 2 controller <b>- Entity Disabled, there are known issues, alpha feature.</b>
 
  #### Services
  * <i>monoprice_custom.snapshot</i> 
