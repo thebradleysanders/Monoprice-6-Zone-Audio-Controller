@@ -7,6 +7,8 @@
  
  <b>Note:</b> if you your zones are slow to respond, make sure all entities in the zones you are not using are disabled in Home Assistant.
 
+ ![alt text](https://github.com/thebradleysanders/Monoprice-6-Zone-Home-Controller/blob/main/Screenshots/control-ui.png?raw=true)
+
 ## How To:
 ### <a href="https://github.com/hacs/integration">HACS</a>
 * Open HACS->Integrations->3 Dots->Custom repositories
