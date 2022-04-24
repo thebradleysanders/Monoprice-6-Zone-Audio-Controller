@@ -25,3 +25,13 @@
  * High Bass
  * Medium Bass
  * Low Bass
+
+  ## Sensors
+  * Keypad (Connected/Disconnected)
+  * Do Not Disturb (On/Off)
+  * Public Anouncement (On/Off)
+  
+  ## Sliders (Numbers)
+  * Balance
+  * Bass
+  * Treble
