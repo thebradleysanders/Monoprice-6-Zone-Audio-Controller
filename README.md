@@ -11,21 +11,25 @@
 * Click add->Monoprice 6-Zone Amplifier Custom
 * Configure using your serial port & source names
 
-* <b>Note:</b> If the core integration is already configured, disable it before adding this custom one.
+<b>Note:</b> If the core integration is already configured, disable it before adding this custom one.
 
- ## Zones
+
+## Additional Features
+These are features not included in the original Monoprice Integration.
+
+ #### Zones
  * 10 - Used to control all zones on the master controller
  * 20 - Used to control all zones on the slave 1 controller
  * 30 - Used to control all zones on the slave 2 controller
 
- ## Services
- * monoprice_custom.snapshot
- * monoprice_custom.restore
+ #### Services
+ * <i>monoprice_custom.snapshot</i> 
+ * <i>monoprice_custom.restore</i>
  * monoprice_custom.set_balance
  * monoprice_custom.set_bass
  * monoprice_custom.set_treble
 
- ## Sound Modes
+ #### Sound Modes
  The sound modes can be controlled via a select dropdown on the media_player card.
  The sound modes are:
  * Normal
@@ -33,12 +37,12 @@
  * Medium Bass
  * Low Bass
 
-  ## Sensors
+  #### Sensors
   * Keypad (Connected/Disconnected)
   * Do Not Disturb (On/Off)
   * Public Anouncement (On/Off)
   
-  ## Sliders (Numbers)
+  #### Sliders (Numbers)
   * Balance
   * Bass
   * Treble
