@@ -162,11 +162,11 @@ class MonopriceZone(NumberEntity):
         """Return the step of the zone."""
         return self._step
 
-    def set_value(self, value: float) -> None:
+    def set_value(self, value: int) -> None:
         """Update the current value."""
         if(self._control_type == "Balance"):
-            self._monoprice.set_balance(self._zone_id, value)
+            self._monoprice.set_balance(self._zone_id, int(value))
         elif(self._control_type == "Bass"):
-            self._monoprice.set_bass(self._zone_id, value)
+            self._monoprice.set_bass(self._zone_id, int(value))
         elif(self._control_type == "Treble"):
-            self._monoprice.set_treble(self._zone_id, value)
+            self._monoprice.set_treble(self._zone_id, int(value))

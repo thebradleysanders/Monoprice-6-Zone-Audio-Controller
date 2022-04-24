@@ -60,7 +60,7 @@ SUPPORT_FEATURES = (
 SET_BALANCE_SCHEMA = vol.Schema(
     {
         vol.Optional("entity_id", default=[]): vol.All(cv.ensure_list, [cv.string]),
-        vol.Optional(ATTR_BALANCE, default=0): vol.All(int, vol.Range(min=1, max=20))
+        vol.Optional(ATTR_BALANCE, default=0): vol.All(int, vol.Range(min=0, max=21))
     }
 )
 
@@ -114,11 +114,8 @@ async def async_setup_entry(
     sources = _get_sources(config_entry)
 
     entities = []
-    entities.append(MonopriceZone(monoprice, sources, config_entry.entry_id, 10))
-    entities.append(MonopriceZone(monoprice, sources, config_entry.entry_id, 20))
-    entities.append(MonopriceZone(monoprice, sources, config_entry.entry_id, 30))
     for i in range(1, 4):
-        for j in range(1, 7):
+        for j in range(0, 7):
             zone_id = (i * 10) + j
             _LOGGER.info("Adding media player entity for zone %d for port %s", zone_id, port)
             entities.append(MonopriceZone(monoprice, sources, config_entry.entry_id, zone_id))

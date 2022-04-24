@@ -19,7 +19,7 @@ set_balance:
   description: Set the zone balance level.
   target:
     entity:
-      integration: monoprice
+      integration: monoprice_custom
       domain: media_player
   fields:
     level:
