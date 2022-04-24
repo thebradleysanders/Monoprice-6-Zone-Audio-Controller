@@ -30,9 +30,9 @@
 These are features not included in the original Monoprice Integration.
 
  #### Zones
- * 10 - Used to control all zones on the master controller
- * 20 - Used to control all zones on the slave 1 controller
- * 30 - Used to control all zones on the slave 2 controller
+ * 10 - Used to control all zones on the master controller <b>- There are known issues, alpha feature.</b>
+ * 20 - Used to control all zones on the slave 1 controller <b>- There are known issues, alpha feature.</b>
+ * 30 - Used to control all zones on the slave 2 controller <b>- There are known issues, alpha feature.</b>
 
  #### Services
  * <i>monoprice_custom.snapshot</i> 
