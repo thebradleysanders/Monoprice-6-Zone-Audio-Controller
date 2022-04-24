@@ -114,13 +114,14 @@ async def async_setup_entry(
     sources = _get_sources(config_entry)
 
     entities = []
+    entities.append(MonopriceZone(monoprice, sources, config_entry.entry_id, 10))
+    entities.append(MonopriceZone(monoprice, sources, config_entry.entry_id, 20))
+    entities.append(MonopriceZone(monoprice, sources, config_entry.entry_id, 30))
     for i in range(1, 4):
         for j in range(1, 7):
             zone_id = (i * 10) + j
-            _LOGGER.info("Adding zone %d for port %s", zone_id, port)
-            entities.append(
-                MonopriceZone(monoprice, sources, config_entry.entry_id, zone_id)
-            )
+            _LOGGER.info("Adding media player entity for zone %d for port %s", zone_id, port)
+            entities.append(MonopriceZone(monoprice, sources, config_entry.entry_id, zone_id))
 
     # only call update before add if it's the first run so we can try to detect zones
     first_run = hass.data[DOMAIN][config_entry.entry_id][FIRST_RUN]

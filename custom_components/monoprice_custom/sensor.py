@@ -43,7 +43,7 @@ async def async_setup_entry(
     for i in range(1, 4):
         for j in range(1, 7):
             zone_id = (i * 10) + j
-            _LOGGER.info("Adding zone %d for port %s", zone_id, port)
+            _LOGGER.info("Adding sensor entities for zone %d for port %s", zone_id, port)
             entities.append(MonopriceZone(monoprice, "Keypad", config_entry.entry_id, zone_id))
             entities.append(MonopriceZone(monoprice, "Public Anouncement", config_entry.entry_id, zone_id))
             entities.append(MonopriceZone(monoprice, "Do Not Disturb", config_entry.entry_id, zone_id))
