@@ -1,6 +1,8 @@
 # Home Assistant Custom Integration: Monoprice 6-Zone Amplifier
  An Integration for the Monoprice 6-Zone Amplifier, with added sound mode, balance, treble & bass
- This is a modification of the <a href="https://www.home-assistant.io/integrations/monoprice/">existing Monoprice integration</a>, when installed this will override it.
+ This is a modification of the <a href="https://www.home-assistant.io/integrations/monoprice/">existing Monoprice integration</a>.
+ 
+ <b>Note:</b> if you your zones are slow to respond, make sure all entities in the zones you are not using are disabled in Home Assistant.
 
 ## How To:
 * Add the monoprice folder to your /config/custom_components folder
@@ -25,3 +27,13 @@
  * High Bass
  * Medium Bass
  * Low Bass
+
+  ## Sensors
+  * Keypad (Connected/Disconnected)
+  * Do Not Disturb (On/Off)
+  * Public Anouncement (On/Off)
+  
+  ## Sliders (Numbers)
+  * Balance
+  * Bass
+  * Treble
