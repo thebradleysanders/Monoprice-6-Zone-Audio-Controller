@@ -13,6 +13,11 @@
 
 * <b>Note:</b> If the core integration is already configured, disable it before adding this custom one.
 
+ ## Zones
+ * 10 - Used to control all zones on the master controller
+ * 20 - Used to control all zones on the slave 1 controller
+ * 30 - Used to control all zones on the slave 2 controller
+
  ## Services
  * monoprice_custom.snapshot
  * monoprice_custom.restore
