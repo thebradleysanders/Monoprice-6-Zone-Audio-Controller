@@ -1,7 +1,7 @@
 {
   "domain": "monoprice_custom",
   "name": "Monoprice 6-Zone Amplifier Custom",
-  "version":"1.0.2",
+  "version":"1.0.3",
   "documentation": "https://github.com/thebradleysanders/Custom_Components_Monoprice",
   "issue_tracker": "https://github.com/thebradleysanders/Custom_Components_Monoprice/issues",
   "requirements": ["pymonoprice==0.3"],
