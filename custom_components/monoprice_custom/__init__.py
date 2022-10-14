@@ -1,7 +1,7 @@
 """The Monoprice 6-Zone Amplifier integration."""
 import logging
 
-from pymonoprice import get_monoprice
+from pymonoprice_custom import get_monoprice
 from serial import SerialException
 
 from homeassistant.config_entries import ConfigEntry
