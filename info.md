@@ -1,7 +1,3 @@
-# Home Assistant Custom Integration: Monoprice 6-Zone Amplifier
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
-
-
  An Integration for the Monoprice 6-Zone Amplifier, with added sound mode, balance, treble & bass
  This is a modification of the <a href="https://www.home-assistant.io/integrations/monoprice/">existing Monoprice integration</a>.
  

@@ -1,12 +1,10 @@
 {
   "name": "Monoprice 6-Zone Home Audio Controller",
-  "content_in_root": false,
   "domains": [
     "media_player",
     "sensor",
     "number"
   ],
   "iot_class": "local_push",
-  "zip_release": false,
   "homeassistant": "2021.12.0b0"
 }
