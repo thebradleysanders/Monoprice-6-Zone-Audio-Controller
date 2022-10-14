@@ -1,25 +1,20 @@
 """Support for interfacing with Monoprice 6 zone home audio controller."""
-"""This Version add support for sound_mode & services: set_bass, set_treble, set_balance"""
-from code import interact
 import logging
 
 from serial import SerialException
 
 from homeassistant import core
-try:
-    from homeassistant.components.media_player import (
-        MediaPlayerEntity as MediaPlayerDevice,
-    )
-except ImportError:
-    from homeassistant.components.media_player import MediaPlayerDevice
-
+from homeassistant.components.media_player import (
+    MediaPlayerEntity,
+    MediaPlayerEntityFeature,
+    MediaPlayerState,
+)
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_PORT, STATE_OFF, STATE_ON
+from homeassistant.const import CONF_PORT
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import config_validation as cv, entity_platform, service
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-import voluptuous as vol
 
 from .const import (
     CONF_SOURCES,
@@ -34,27 +29,6 @@ from .const import (
     ATTR_BALANCE,
     ATTR_BASS,
     ATTR_TREBLE
-)
-
-from homeassistant.components.media_player.const import (
-    MEDIA_TYPE_MUSIC,
-    SUPPORT_SELECT_SOURCE,
-    SUPPORT_TURN_OFF,
-    SUPPORT_TURN_ON,
-    SUPPORT_VOLUME_MUTE,
-    SUPPORT_VOLUME_SET,
-    SUPPORT_VOLUME_STEP,
-    SUPPORT_SELECT_SOUND_MODE
-)
-
-SUPPORT_FEATURES = (
-    SUPPORT_VOLUME_SET
-    | SUPPORT_TURN_OFF
-    | SUPPORT_TURN_ON
-    | SUPPORT_VOLUME_MUTE
-    | SUPPORT_SELECT_SOURCE
-    | SUPPORT_VOLUME_STEP
-    | SUPPORT_SELECT_SOUND_MODE
 )
 
 SET_BALANCE_SCHEMA = vol.Schema(
@@ -86,9 +60,13 @@ PARALLEL_UPDATES = 1
 @core.callback
 def _get_sources_from_dict(data):
     sources_config = data[CONF_SOURCES]
+
     source_id_name = {int(index): name for index, name in sources_config.items()}
+
     source_name_id = {v: k for k, v in source_id_name.items()}
+
     source_names = sorted(source_name_id.keys(), key=lambda v: source_name_id[v])
+
     return [source_id_name, source_name_id, source_names]
 
 
@@ -115,10 +93,12 @@ async def async_setup_entry(
 
     entities = []
     for i in range(1, 4):
-        for j in range(0, 7):
+        for j in range(1, 7):
             zone_id = (i * 10) + j
-            _LOGGER.info("Adding media player entity for zone %d for port %s", zone_id, port)
-            entities.append(MonopriceZone(monoprice, sources, config_entry.entry_id, zone_id))
+            _LOGGER.info("Adding zone %d for port %s", zone_id, port)
+            entities.append(
+                MonopriceZone(monoprice, sources, config_entry.entry_id, zone_id)
+            )
 
     # only call update before add if it's the first run so we can try to detect zones
     first_run = hass.data[DOMAIN][config_entry.entry_id][FIRST_RUN]
@@ -148,7 +128,6 @@ async def async_setup_entry(
             return
 
         hass.async_add_executor_job(_call_service, entities, service_call)
-
 
     hass.services.async_register(
         DOMAIN,
@@ -185,10 +164,18 @@ async def async_setup_entry(
         schema=SET_TREBLE_SCHEMA,
     )
 
-
-class MonopriceZone(MediaPlayerDevice):
+class MonopriceZone(MediaPlayerEntity):
     """Representation of a Monoprice amplifier zone."""
 
+    _attr_supported_features = (
+        MediaPlayerEntityFeature.VOLUME_MUTE
+        | MediaPlayerEntityFeature.VOLUME_SET
+        | MediaPlayerEntityFeature.VOLUME_STEP
+        | MediaPlayerEntityFeature.TURN_ON
+        | MediaPlayerEntityFeature.TURN_OFF
+        | MediaPlayerEntityFeature.SELECT_SOURCE
+        | MediaPlayerEntityFeature.SELECT_SOUND_MODE
+    )
 
     def __init__(self, monoprice, sources, namespace, zone_id):
         """Initialize new zone."""
@@ -209,10 +196,10 @@ class MonopriceZone(MediaPlayerDevice):
         self._volume = None
         self._source = None
         self._mute = None
-        self._sound_mode = None
         self._update_success = True
+        self._sound_mode = None
 
-    def update(self):
+    def update(self) -> None:
         """Retrieve latest state."""
         try:
             state = self._monoprice.zone_status(self._zone_id)
@@ -225,7 +212,7 @@ class MonopriceZone(MediaPlayerDevice):
             self._update_success = False
             return
 
-        self._state = STATE_ON if state.power else STATE_OFF
+        self._state = MediaPlayerState.ON if state.power else MediaPlayerState.OFF
         self._volume = state.volume
         self._mute = state.mute
         idx = state.source
@@ -248,13 +235,8 @@ class MonopriceZone(MediaPlayerDevice):
             identifiers={(DOMAIN, self.unique_id)},
             manufacturer="Monoprice",
             model="6-Zone Amplifier",
-            name="Zone " + str(self._zone_id)
+            name=self.name,
         )
-
-    @property
-    def supported_features(self):
-        """Flag media player features that are supported."""
-        return SUPPORT_FEATURES
 
     @property
     def unique_id(self):
@@ -294,14 +276,14 @@ class MonopriceZone(MediaPlayerDevice):
         return self._source
 
     @property
-    def sound_mode(self):
-        """Return the current sound mode of the device."""
-        return self._sound_mode
-
-    @property
     def source_list(self):
         """List of available input sources."""
         return self._source_names
+    
+    @property
+    def sound_mode(self):
+        """Return the current sound mode of the device."""
+        return self._sound_mode
 
     @property
     def sound_mode_list(self):
@@ -318,6 +300,41 @@ class MonopriceZone(MediaPlayerDevice):
             self._monoprice.restore_zone(self._snapshot)
             self.schedule_update_ha_state(True)
 
+    def select_source(self, source: str) -> None:
+        """Set input source."""
+        if source not in self._source_name_id:
+            return
+        idx = self._source_name_id[source]
+        self._monoprice.set_source(self._zone_id, idx)
+
+    def turn_on(self) -> None:
+        """Turn the media player on."""
+        self._monoprice.set_power(self._zone_id, True)
+
+    def turn_off(self) -> None:
+        """Turn the media player off."""
+        self._monoprice.set_power(self._zone_id, False)
+
+    def mute_volume(self, mute: bool) -> None:
+        """Mute (true) or unmute (false) media player."""
+        self._monoprice.set_mute(self._zone_id, mute)
+
+    def set_volume_level(self, volume: float) -> None:
+        """Set volume level, range 0..1."""
+        self._monoprice.set_volume(self._zone_id, int(volume * 38))
+
+    def volume_up(self) -> None:
+        """Volume up the media player."""
+        if self._volume is None:
+            return
+        self._monoprice.set_volume(self._zone_id, min(self._volume + 1, 38))
+
+    def volume_down(self) -> None:
+        """Volume down media player."""
+        if self._volume is None:
+            return
+        self._monoprice.set_volume(self._zone_id, max(self._volume - 1, 0))
+
     def set_balance(self, call):
         """Set balance level."""
         level = int(call.data.get(ATTR_BALANCE))
@@ -332,41 +349,6 @@ class MonopriceZone(MediaPlayerDevice):
         """Set treble level."""
         level = int(call.data.get(ATTR_TREBLE))
         self._monoprice.set_treble(self._zone_id, level)
-
-    def select_source(self, source):
-        """Set input source."""
-        if source not in self._source_name_id:
-            return
-        idx = self._source_name_id[source]
-        self._monoprice.set_source(self._zone_id, idx)
-
-    def turn_on(self):
-        """Turn the media player on."""
-        self._monoprice.set_power(self._zone_id, True)
-
-    def turn_off(self):
-        """Turn the media player off."""
-        self._monoprice.set_power(self._zone_id, False)
-
-    def mute_volume(self, mute):
-        """Mute (true) or unmute (false) media player."""
-        self._monoprice.set_mute(self._zone_id, mute)
-
-    def set_volume_level(self, volume):
-        """Set volume level, range 0..1."""
-        self._monoprice.set_volume(self._zone_id, int(volume * 38))
-
-    def volume_up(self):
-        """Volume up the media player."""
-        if self._volume is None:
-            return
-        self._monoprice.set_volume(self._zone_id, min(self._volume + 1, 38))
-
-    def volume_down(self):
-        """Volume down media player."""
-        if self._volume is None:
-            return
-        self._monoprice.set_volume(self._zone_id, max(self._volume - 1, 0))
 
     def select_sound_mode(self, sound_mode):
         """Switch the sound mode of the entity."""
