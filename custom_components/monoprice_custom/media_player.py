@@ -315,7 +315,7 @@ class MonopriceZone(MediaPlayerEntity):
 
     def mute_volume(self, mute: bool) -> None:
         """Mute (true) or unmute (false) media player."""
-        self._monoprice.set_mute(self._zone_id, mute)
+        self._monoprice.set_do_not_disturb(self._zone_id, mute)
 
     def set_volume_level(self, volume: float) -> None:
         """Set volume level, range 0..1."""

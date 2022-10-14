@@ -313,7 +313,7 @@ def get_async_monoprice(port_url, loop):
         @locked_coro
         @asyncio.coroutine
         def set_treble(self, zone: int, treble: int):
-            yield from self._protocol.send(_format_set_treble(zone, 15))
+            yield from self._protocol.send(_format_set_treble(zone, treble))
 
         @locked_coro
         @asyncio.coroutine
