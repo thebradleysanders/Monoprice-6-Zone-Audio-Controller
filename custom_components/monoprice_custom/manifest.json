@@ -4,7 +4,7 @@
   "version":"1.0.3",
   "documentation": "https://github.com/thebradleysanders/Custom_Components_Monoprice",
   "issue_tracker": "https://github.com/thebradleysanders/Custom_Components_Monoprice/issues",
-  "requirements": ["pymonoprice==0.3"],
+  "requirements": [],
   "codeowners": ["@etsinko", "@OnFreund", "@TheBradleySanders"],
   "config_flow": true,
   "iot_class": "local_polling",
