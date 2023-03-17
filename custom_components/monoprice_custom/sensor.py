@@ -29,7 +29,6 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 PARALLEL_UPDATES = 1
 
-
 async def async_setup_entry(
     hass: HomeAssistant,
     config_entry: ConfigEntry,
@@ -54,7 +53,6 @@ async def async_setup_entry(
 
     platform = entity_platform.async_get_current_platform()
 
-
     @service.verify_domain_control(hass, DOMAIN)
     async def async_service_handle(service_call: core.ServiceCall) -> None:
         """Handle for services."""
@@ -63,26 +61,31 @@ async def async_setup_entry(
         if not entities:
             return
 
-
 class MonopriceZone(SensorEntity):
     """Representation of a Monoprice amplifier zone."""
-
 
     def __init__(self, monoprice, sensor_type, namespace, zone_id):
         """Initialize new zone sensors."""
         self._monoprice = monoprice
         self._sensor_type = sensor_type
         self._zone_id = zone_id
-        self._unique_id = f"{namespace}_{self._zone_id}"
-        self._name = f"Zone {self._zone_id} {sensor_type}"
-        self._state = None
+        self._attr_unique_id = f"{namespace}_{self._zone_id}_{self._sensor_type}"
+        self._attr_has_entity_name = True
+        self._attr_name = f"{sensor_type}"
+        self._attr_native_value = None
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, self._unique_id)},
+            manufacturer="Monoprice",
+            model="6-Zone Amplifier",
+            name=self.name
+        )
 
         if(sensor_type == "Keypad"):
-            self._icon = "mdi:dialpad"
+            self._attr_icon = "mdi:dialpad"
         elif(sensor_type == "Public Anouncement"):
-            self._icon = "mdi:bullhorn"
+            self._attr_icon = "mdi:bullhorn"
         elif(sensor_type == "Do Not Disturb"):
-            self._icon = "mdi:weather-night"
+            self._attr_icon = "mdi:weather-night"
             
         self._update_success = True
 
@@ -100,43 +103,13 @@ class MonopriceZone(SensorEntity):
             return
 
         if(self._sensor_type == "Keypad"):
-            self._state = '{}'.format('Connected' if state.keypad else 'Disconnected')
+            self._attr_native_value = '{}'.format('Connected' if state.keypad else 'Disconnected')
         elif(self._sensor_type == "Public Anouncement"):
-            self._state = '{}'.format('On' if state.pa else 'Off')
+            self._attr_native_value = '{}'.format('On' if state.pa else 'Off')
         elif(self._sensor_type == "Do Not Disturb"):
-            self._state = '{}'.format('On' if state.do_not_disturb else 'Off')
+            self._attr_native_value = '{}'.format('On' if state.do_not_disturb else 'Off')
 
     @property
     def entity_registry_enabled_default(self):
         """Return if the entity should be enabled when first added to the entity registry."""
         return self._zone_id < 20 or self._update_success
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return device info for this device."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self._unique_id)},
-            manufacturer="Monoprice",
-            model="6-Zone Amplifier",
-            name="Zone " + str(self._zone_id)
-        )
-
-    @property
-    def unique_id(self):
-        """Return unique ID for this device."""
-        return self._unique_id + "_" + self._sensor_type
-
-    @property
-    def name(self):
-        """Return the name of the zone."""
-        return self._name
-
-    @property
-    def native_value(self) -> str:
-        """Return the state of the zone."""
-        return self._state
-
-    @property
-    def icon(self):
-        """Return the icon of the zone."""
-        return self._icon
