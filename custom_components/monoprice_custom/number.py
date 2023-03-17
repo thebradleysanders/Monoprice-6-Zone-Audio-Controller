@@ -120,6 +120,8 @@ class MonopriceZone(NumberEntity):
     @property
     def entity_registry_enabled_default(self):
         """Return if the entity should be enabled when first added to the entity registry."""
+        if(self._zone_id == 10 or self._zone_id == 20 or self._zone_id == 30):
+            return False
         return self._zone_id < 20 or self._update_success
 
     def set_native_value(self, value: float) -> None:
