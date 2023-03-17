@@ -53,7 +53,6 @@ async def async_setup_entry(
 
     platform = entity_platform.async_get_current_platform()
 
-
     @service.verify_domain_control(hass, DOMAIN)
     async def async_service_handle(service_call: core.ServiceCall) -> None:
         """Handle for services."""
@@ -62,36 +61,42 @@ async def async_setup_entry(
         if not entities:
             return
 
-
 class MonopriceZone(NumberEntity):
     """Representation of a Monoprice amplifier zone."""
-
 
     def __init__(self, monoprice, control_type, namespace, zone_id):
         """Initialize new zone controls."""
         self._monoprice = monoprice
         self._control_type = control_type
         self._zone_id = zone_id
-        self._unique_id = f"{namespace}_{self._zone_id}"
-        self._name = f"Zone {self._zone_id} {control_type}"
-        self._step = 1
-        self._value = None
+        
+        self._attr_unique_id = f"{namespace}_{self._zone_id}_{self._control_type}"
+        self._attr_has_entity_name = True
+        self._attr_name = f"{control_type} level"
+        self._attr_step = 1
+        self._attr_value = None
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, self._unique_id)},
+            manufacturer="Monoprice",
+            model="6-Zone Amplifier",
+            name="Zone " + str(self._zone_id)
+        )
 
         if(control_type == "Balance"):
-            self._min_value = 0
-            self._max_value = 20
-            self._icon = "mdi:scale-balance"
+            self._attr_min_value = 0
+            self._attr_max_value = 20
+            self._attr_icon = "mdi:scale-balance"
         elif(control_type == "Bass"):
-            self._min_value = -7
-            self._max_value = 14
-            self._icon = "mdi:speaker"
+            self._attr_min_value = -7
+            self._attr_max_value = 14
+            self._attr_icon = "mdi:speaker"
         elif(control_type == "Treble"):
-            self._min_value = -7
-            self._max_value = 14
-            self._icon = "mdi:surround-sound"
+            self._attr_min_value = -7
+            self._attr_max_value = 14
+            self._attr_icon = "mdi:surround-sound"
             
         self._update_success = True
-
+        
     def update(self):
         """Retrieve latest value."""
         try:
@@ -106,63 +111,18 @@ class MonopriceZone(NumberEntity):
             return
 
         if(self._control_type == "Balance"):
-            self._value = state.balance
+            self._attr_value = state.balance
         elif(self._control_type == "Bass"):
-            self._value = state.bass
+            self._attr_value = state.bass
         elif(self._control_type == "Treble"):
-            self._value = state.treble
+            self._attr_value = state.treble
 
     @property
     def entity_registry_enabled_default(self):
         """Return if the entity should be enabled when first added to the entity registry."""
         return self._zone_id < 20 or self._update_success
 
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return device info for this device."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self._unique_id)},
-            manufacturer="Monoprice",
-            model="6-Zone Amplifier",
-            name="Zone " + str(self._zone_id)
-        )
-
-    @property
-    def unique_id(self):
-        """Return unique ID for this device."""
-        return self._unique_id + "_" + self._control_type
-
-    @property
-    def name(self):
-        """Return the name of the zone."""
-        return self._name
-
-    @property
-    def value(self):
-        """Return the value of the zone."""
-        return self._value
-
-    @property
-    def icon(self):
-        """Return the icon of the zone."""
-        return self._icon
-
-    @property
-    def min_value(self):
-        """Return the ,in value of the zone."""
-        return self._min_value
-
-    @property
-    def max_value(self):
-        """Return the max value of the zone."""
-        return self._max_value
-
-    @property
-    def step(self):
-        """Return the step of the zone."""
-        return self._step
-
-    def set_value(self, value: int) -> None:
+    def set_native_value(self, value: float) -> None:
         """Update the current value."""
         if(self._control_type == "Balance"):
             self._monoprice.set_balance(self._zone_id, int(value))
