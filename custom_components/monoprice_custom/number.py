@@ -73,8 +73,8 @@ class MonopriceZone(NumberEntity):
         self._attr_unique_id = f"{namespace}_{self._zone_id}_{self._control_type}"
         self._attr_has_entity_name = True
         self._attr_name = f"{control_type} level"
-        self._attr_step = 1
-        self._attr_value = None
+        self._attr_native_step = 1
+        self._attr_native_value = None
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, self._zone_id)},
             manufacturer="Monoprice",
@@ -83,16 +83,16 @@ class MonopriceZone(NumberEntity):
         )
 
         if(control_type == "Balance"):
-            self._attr_min_value = 0
-            self._attr_max_value = 20
+            self._attr_native_min_value = 0
+            self._attr_native_max_value = 20
             self._attr_icon = "mdi:scale-balance"
         elif(control_type == "Bass"):
-            self._attr_min_value = -7
-            self._attr_max_value = 14
+            self._attr_native_min_value = -7
+            self._attr_native_max_value = 14
             self._attr_icon = "mdi:speaker"
         elif(control_type == "Treble"):
-            self._attr_min_value = -7
-            self._attr_max_value = 14
+            self._attr_native_min_value = -7
+            self._attr_native_max_value = 14
             self._attr_icon = "mdi:surround-sound"
             
         self._update_success = True
@@ -111,11 +111,11 @@ class MonopriceZone(NumberEntity):
             return
 
         if(self._control_type == "Balance"):
-            self._attr_value = state.balance
+            self._attr_native_value = state.balance
         elif(self._control_type == "Bass"):
-            self._attr_value = state.bass
+            self._attr_native_value = state.bass
         elif(self._control_type == "Treble"):
-            self._attr_value = state.treble
+            self._attr_native_value = state.treble
 
     @property
     def entity_registry_enabled_default(self):
