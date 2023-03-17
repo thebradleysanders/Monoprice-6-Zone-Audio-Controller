@@ -79,7 +79,7 @@ class MonopriceZone(NumberEntity):
             identifiers={(DOMAIN, self._unique_id)},
             manufacturer="Monoprice",
             model="6-Zone Amplifier",
-            name=self.name
+            name=f"Zone {self._zone_id}"
         )
 
         if(control_type == "Balance"):
