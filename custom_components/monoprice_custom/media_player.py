@@ -190,7 +190,7 @@ class MonopriceZone(MediaPlayerEntity):
         self._zone_id = zone_id
         self._attr_unique_id = f"{namespace}_{self._zone_id}"
         self._attr_has_entity_name = True
-        self._attr_name = f"Zone {self._zone_id}"
+        self._attr_name = None
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, self._zone_id)},
             manufacturer="Monoprice",
