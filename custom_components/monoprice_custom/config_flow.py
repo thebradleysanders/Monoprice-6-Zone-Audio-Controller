@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import logging
 
-from .pymonoprice_custom import get_monoprice
+from pymonoprice import get_monoprice
 from serial import SerialException
 import voluptuous as vol
 
