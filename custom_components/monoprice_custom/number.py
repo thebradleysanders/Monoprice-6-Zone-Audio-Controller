@@ -75,6 +75,12 @@ class MonopriceZone(NumberEntity):
         self._attr_name = f"{control_type} level"
         self._attr_step = 1
         self._attr_value = None
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, self._zone_id)},
+            manufacturer="Monoprice",
+            model="6-Zone Amplifier",
+            name=f"Zone {self._zone_id}"
+        )
 
         if(control_type == "Balance"):
             self._attr_min_value = 0
