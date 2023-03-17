@@ -192,10 +192,10 @@ class MonopriceZone(MediaPlayerEntity):
         self._attr_has_entity_name = True
         self._attr_name = f"Zone {self._zone_id}"
         self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, self.unique_id)},
+            identifiers={(DOMAIN, self._zone_id)},
             manufacturer="Monoprice",
             model="6-Zone Amplifier",
-            name=self.name,
+            name=f"Zone {self._zone_id}"
         )
         self._attr_sound_mode_list = ["Normal", "High Bass", "Medium Bass", "Low Bass"]
 
