@@ -76,7 +76,7 @@ class MonopriceZone(NumberEntity):
         self._attr_step = 1
         self._attr_value = None
         self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, self._unique_id)},
+            identifiers={(DOMAIN, self.unique_id)},
             manufacturer="Monoprice",
             model="6-Zone Amplifier",
             name=f"Zone {self._zone_id}"
