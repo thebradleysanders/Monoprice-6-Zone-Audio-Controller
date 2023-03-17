@@ -1,12 +1,12 @@
 {
   "domain": "monoprice_custom",
   "name": "Monoprice 6-Zone Amplifier Custom",
-  "version":"1.0.4",
-  "documentation": "https://github.com/thebradleysanders/Custom_Components_Monoprice",
-  "issue_tracker": "https://github.com/thebradleysanders/Custom_Components_Monoprice/issues",
-  "requirements": ["pymonoprice==0.4"],
   "codeowners": ["@etsinko", "@OnFreund", "@TheBradleySanders"],
   "config_flow": true,
+  "documentation": "https://github.com/thebradleysanders/Custom_Components_Monoprice",
   "iot_class": "local_polling",
-  "loggers": ["pymonoprice"]
+  "issue_tracker": "https://github.com/thebradleysanders/Custom_Components_Monoprice/issues",
+  "loggers": ["pymonoprice"],
+  "requirements": ["pymonoprice==0.4"],
+  "version":"1.0.4"
 }
