@@ -188,17 +188,19 @@ class MonopriceZone(MediaPlayerEntity):
         # ordered list of all source names
         self._attr_source_list = sources[2]
         self._zone_id = zone_id
+        self._attr_unique_id = f"{namespace}_{self._zone_id}"
+        self._attr_name = f"Zone {self._zone_id}"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, self._attr_unique_id)},
             manufacturer="Monoprice",
             model="6-Zone Amplifier",
             name=self.name,
         )
-        self._sound_mode_names = ["Normal", "High Bass", "Medium Bass", "Low Bass"]
+        self._attr_sound_mode_list = ["Normal", "High Bass", "Medium Bass", "Low Bass"]
 
         self._snapshot = None
         self._update_success = True
-        self._sound_mode = None
+        self._attr_sound_mode = None
 
     def update(self) -> None:
         """Retrieve latest state."""
@@ -230,16 +232,6 @@ class MonopriceZone(MediaPlayerEntity):
     def media_title(self):
         """Return the current source as medial title."""
         return self.source
-    
-    @property
-    def sound_mode(self):
-        """Return the current sound mode of the device."""
-        return self._sound_mode
-
-    @property
-    def sound_mode_list(self):
-        """List of available sound modes."""
-        return self._sound_mode_names
 
     def snapshot(self):
         """Save zone's current state."""
