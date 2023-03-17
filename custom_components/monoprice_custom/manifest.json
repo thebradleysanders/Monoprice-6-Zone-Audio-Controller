@@ -7,6 +7,6 @@
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/thebradleysanders/Custom_Components_Monoprice/issues",
   "loggers": ["pymonoprice"],
-  "requirements": ["pymonoprice==0.4"],
+  "requirements": [],
   "version":"1.0.4"
 }
