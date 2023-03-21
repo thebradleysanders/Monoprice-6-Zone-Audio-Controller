@@ -1,5 +1,5 @@
 {
-  "domain": "monoprice",
+  "domain": "monoprice_custom",
   "name": "Monoprice 6-Zone Amplifier Custom",
   "codeowners": ["@etsinko", "@OnFreund", "@TheBradleySanders"],
   "config_flow": true,
