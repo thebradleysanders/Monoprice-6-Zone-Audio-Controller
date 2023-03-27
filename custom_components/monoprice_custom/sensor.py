@@ -110,7 +110,7 @@ class MonopriceZone(SensorEntity):
             self._attr_native_value = '{}'.format('On' if state.do_not_disturb else 'Off')
 
     @property
-    def entity_registry_enabled_default(self):
+    def entity_registry_enabled_default(self) -> bool:
         """Return if the entity should be enabled when first added to the entity registry."""
         if(self._zone_id == 10 or self._zone_id == 20 or self._zone_id == 30):
             return False
