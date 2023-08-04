@@ -20,7 +20,6 @@ from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import (
-    CONF_SOURCES,
     DOMAIN,
     FIRST_RUN,
     MONOPRICE_OBJECT
@@ -43,9 +42,9 @@ async def async_setup_entry(
         for j in range(1, 7):
             zone_id = (i * 10) + j
             _LOGGER.info("Adding sensor entities for zone %d for port %s", zone_id, port)
-            entities.append(MonopriceZone(monoprice, "Keypad", config_entry.entry_id, zone_id))
-            entities.append(MonopriceZone(monoprice, "Public Anouncement", config_entry.entry_id, zone_id))
-            entities.append(MonopriceZone(monoprice, "Do Not Disturb", config_entry.entry_id, zone_id))
+            entities.append(MonopriceZone(monoprice, "Keypad", config_entry, zone_id))
+            entities.append(MonopriceZone(monoprice, "Public Anouncement", config_entry, zone_id))
+            entities.append(MonopriceZone(monoprice, "Do Not Disturb", config_entry, zone_id))
 
     # only call update before add if it's the first run so we can try to detect zones
     first_run = hass.data[DOMAIN][config_entry.entry_id][FIRST_RUN]
@@ -64,17 +63,17 @@ async def async_setup_entry(
 class MonopriceZone(SensorEntity):
     """Representation of a Monoprice amplifier zone."""
 
-    def __init__(self, monoprice, sensor_type, namespace, zone_id):
+    def __init__(self, monoprice, sensor_type, config_entry, zone_id):
         """Initialize new zone sensors."""
         self._monoprice = monoprice
         self._sensor_type = sensor_type
         self._zone_id = zone_id
-        self._attr_unique_id = f"{namespace}_{self._zone_id}_{self._sensor_type}"
+        self._attr_unique_id = f"{config_entry.entry_id}_{self._zone_id}_{self._sensor_type}"
         self._attr_has_entity_name = True
         self._attr_name = f"{sensor_type}"
         self._attr_native_value = None
         self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, self._zone_id)},
+            identifiers={(DOMAIN, self._zone_id, config_entry.entry_id)},
             manufacturer="Monoprice",
             model="6-Zone Amplifier",
             name=f"Zone {self._zone_id}"

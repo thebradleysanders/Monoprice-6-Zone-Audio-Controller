@@ -8,5 +8,5 @@
   "issue_tracker": "https://github.com/thebradleysanders/Custom_Components_Monoprice/issues",
   "loggers": ["pymonoprice"],
   "requirements": ["pymonoprice==0.4"],
-  "version":"1.2.3"
+  "version":"1.2.4"
 }
