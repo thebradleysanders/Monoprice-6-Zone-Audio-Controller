@@ -33,9 +33,7 @@ SOURCES = [
 ]
 
 OPTIONS_FOR_DATA = {vol.Optional(source): str for source in SOURCES}
-
 DATA_SCHEMA = vol.Schema({vol.Required(CONF_PORT): str, **OPTIONS_FOR_DATA})
-
 
 @core.callback
 def _sources_from_config(data):
@@ -58,10 +56,11 @@ async def validate_input(hass: core.HomeAssistant, data):
     try:
         await hass.async_add_executor_job(get_monoprice, data[CONF_PORT])
     except SerialException as err:
-        _LOGGER.error("Error connecting to Monoprice controller")
+        _LOGGER.error("Error connecting to Monoprice controller %s", data[CONF_PORT])
         raise CannotConnect from err
 
     sources = _sources_from_config(data)
+
 
     # Return info that you want to store in the config entry.
     return {CONF_PORT: data[CONF_PORT], CONF_SOURCES: sources}
