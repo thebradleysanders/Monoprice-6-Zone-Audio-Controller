@@ -14,7 +14,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_PORT
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import config_validation as cv, entity_platform, service
-from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 import voluptuous as vol
 
@@ -86,10 +86,11 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up the Monoprice 6-zone amplifier platform."""
+    port = config_entry.data[CONF_PORT]
 
     monoprice = hass.data[DOMAIN][config_entry.entry_id][MONOPRICE_OBJECT]
+
     sources = _get_sources(config_entry)
-    port = config_entry.data[CONF_PORT]
 
     entities = []
     for i in range(1, 4):
@@ -182,7 +183,7 @@ class MonopriceZone(MediaPlayerEntity):
     _attr_sound_mode_list = ["Normal", "High Bass", "Medium Bass", "Low Bass"]
     _attr_sound_mode = None
 
-    def __init__(self, monoprice, sources, config_entry, zone_id):
+    def __init__(self, monoprice, sources, namespace, zone_id):
         """Initialize new zone."""
         self._monoprice = monoprice
         # dict source_id -> source name
@@ -193,12 +194,12 @@ class MonopriceZone(MediaPlayerEntity):
         self._attr_source_list = sources[2]
 
         self._zone_id = zone_id
-        self._attr_unique_id = f"{config_entry.entry_id}_{self._zone_id}"
+        self._attr_unique_id = f"{namespace}_{self._zone_id}"
         self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, self._zone_id, config_entry.entry_id)},
+            identifiers={(DOMAIN, self._attr_unique_id)},
             manufacturer="Monoprice",
             model="6-Zone Amplifier",
-            name=f"Zone {self._zone_id}"
+            name=f"Zone {self._zone_id}",
         )
         
         self._snapshot = None
