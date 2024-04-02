@@ -19,7 +19,6 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 import voluptuous as vol
 
 from .const import (
-    CONF_NAME,
     CONF_SOURCES,
     DOMAIN,
     FIRST_RUN,
