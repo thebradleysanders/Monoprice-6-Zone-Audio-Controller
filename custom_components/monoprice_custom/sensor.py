@@ -52,7 +52,7 @@ async def async_setup_entry(
 
     platform = entity_platform.async_get_current_platform()
 
-    @service.verify_domain_control(hass, DOMAIN)
+    @service.verify_domain_control(DOMAIN)
     async def async_service_handle(service_call: core.ServiceCall) -> None:
         """Handle for services."""
         entities = await platform.async_extract_from_service(service_call)
