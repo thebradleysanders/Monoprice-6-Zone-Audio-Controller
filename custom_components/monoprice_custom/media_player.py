@@ -19,7 +19,6 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 import voluptuous as vol
 
 from .const import (
-    CONF_NAME,
     CONF_SOURCES,
     DOMAIN,
     FIRST_RUN,
@@ -109,16 +108,23 @@ async def async_setup_entry(
 
     def _call_service(entities, service_call):
         for entity in entities:
-            if service_call.service == SERVICE_SNAPSHOT:
-                entity.snapshot()
-            elif service_call.service == SERVICE_RESTORE:
-                entity.restore()
-            elif service_call.service == SERVICE_SET_BALANCE:
-                entity.set_balance(service_call)
-            elif service_call.service == SERVICE_SET_BASS:
-                entity.set_bass(service_call)
-            elif service_call.service == SERVICE_SET_TREBLE:
-                entity.set_treble(service_call)
+            # Keep going if one zone fails, otherwise a single serial timeout
+            # silently skips every zone after it.
+            try:
+                if service_call.service == SERVICE_SNAPSHOT:
+                    entity.snapshot()
+                elif service_call.service == SERVICE_RESTORE:
+                    entity.restore()
+                elif service_call.service == SERVICE_SET_BALANCE:
+                    entity.set_balance(service_call)
+                elif service_call.service == SERVICE_SET_BASS:
+                    entity.set_bass(service_call)
+                elif service_call.service == SERVICE_SET_TREBLE:
+                    entity.set_treble(service_call)
+            except SerialException:
+                _LOGGER.warning(
+                    "Could not run %s on %s", service_call.service, entity.entity_id
+                )
 
     @service.verify_domain_control(DOMAIN)
     async def async_service_handle(service_call: core.ServiceCall) -> None:
@@ -128,7 +134,11 @@ async def async_setup_entry(
         if not entities:
             return
 
-        hass.async_add_executor_job(_call_service, entities, service_call)
+        # Wait for the worker to finish. Without this the service returns while
+        # the worker is still walking the zones over the serial bus, so a caller
+        # that changes the zones immediately afterwards races the snapshot and
+        # the later zones get captured in their already-changed state.
+        await hass.async_add_executor_job(_call_service, entities, service_call)
 
     hass.services.async_register(
         DOMAIN,
@@ -239,7 +249,13 @@ class MonopriceZone(MediaPlayerEntity):
 
     def snapshot(self):
         """Save zone's current state."""
-        self._snapshot = self._monoprice.zone_status(self._zone_id)
+        try:
+            self._snapshot = self._monoprice.zone_status(self._zone_id)
+        except SerialException:
+            # Drop the old snapshot rather than keep a stale one, so a later
+            # restore leaves the zone alone instead of replaying an old state.
+            self._snapshot = None
+            _LOGGER.warning("Could not snapshot zone %d", self._zone_id)
 
     def restore(self):
         """Restore saved state."""
